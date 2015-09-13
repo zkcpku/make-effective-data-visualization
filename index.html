@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Story of TI</title>
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/dota.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+      #info{
+        padding-top:5%;
+      }
+      #info img{
+        width:100%;
+      }
+      .tibutton-n {
+            background-image: url("images/next.png");
+            background-size:cover;
+            background-size: 100% 100%;
+       }
+      .tibutton-p {
+            background-image: url("images/pre.png");
+            background-size:cover;
+            background-size: 100% 100%;
+          }
+    </style>
+  </head>
+  <body ng-app="myApp">
+    <div class="container-fluid">
+      <div class="row">
+        <a ng-click="previousTI()" class="col-xs-1 btn btn-default tibutton tibutton-p"></a>
+        <div id="plot_container" class="col-xs-9">
+          <scatter-plot></scatter-plot>
+        </div>
+        <a ng-click="nextTI()" class="col-xs-1 btn btn-default tibutton tibutton-n"></a>
+        <div id="info" class="col-xs-1">
+          <img></img>
+          <h2 id="hero_text"></h2>
+          <h4 id="win_text"></h4>
+          <h4 id="pick_text"></h4>
+          <h4 id="ban_text"></h4>
+        </div>
+      </div>
+      <div class="row">
+        <a id="next-item" ng-click="nextItem()" class="btn btn-default"><span aria-hidden="true">»</span></a>
+        <a id="previous-item" ng-click="previousItem()" class="btn btn-default"><span aria-hidden="true">«</span></a>
+        <div id="dropup1" class="dropup">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 6px;">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
