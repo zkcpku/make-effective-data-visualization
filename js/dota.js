@@ -57,6 +57,7 @@ function start(time) {
 function setItem(n) {
 	_init = n;
 	update();
+	setButton();
 }
 
 function previousTI() {
@@ -76,6 +77,7 @@ function previousItem() {
 	len = items.length;
 	if (_init < 0) _init = len-1;
 	update();
+	setButton();
 }
 
 function nextItem() {
@@ -83,6 +85,7 @@ function nextItem() {
 	len = items.length;
 	if (_init == len) _init = _init % len;
 	update();
+	setButton();
 }
 
 function initialize() {
@@ -283,7 +286,6 @@ function update() {
 		.attr("r",getSize());
 	d3.select('.title')
 		.text('The International ' + init);
-	setButton();
 
 }
 
