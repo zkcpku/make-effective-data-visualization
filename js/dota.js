@@ -87,7 +87,7 @@ function nextItem() {
 
 function initialize() {
 	$(".tibutton").height(height);
-	d3.json("make-effective-data-visualization/data/dota.json",
+	d3.json("data/dota.json",
 			function(d){plot(d)});
 }
 
