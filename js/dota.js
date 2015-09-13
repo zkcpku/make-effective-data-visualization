@@ -244,6 +244,7 @@ function hover(d) {
 			.style('opacity', 1)
 			.attr("r", 1.5*getSize()(d));
 		setInfo(d);
+		setButton();
 		lock = true;
 	}
 }
