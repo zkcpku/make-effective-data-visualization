@@ -1,0 +1,38 @@
+.tibutton {
+	background: transparent;
+	color: #F2F2F2;
+	/* CSS Transition */
+	-webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-moz-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-ms-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-o-transition: background .2s ease-in-out, border .2s ease-in-out;
+	transition: background .2s ease-in-out, border .2s ease-in-out;
+      }
+body {
+	background-size:cover;
+	background-size: 100% 100%;
+}
+body:after {
+	content: url(/images/1.png) url(/images/2.png) url(/images/3.png) url(/images/4.png) url(/images/5.png);
+	display: none;
+}
+#info{
+	height:100%;
+	padding:1%;
+	border-style: solid;
+	border-width: 5px;
+	word-wrap: break-word;
+}
+#info img{
+	width:100%;
+}
+.tibutton-n {
+	background-image: url("/images/next.png");
+	background-size:cover;
+	background-size: 100% 100%;
+}
+.tibutton-p {
+	background-image: url("/images/pre.png");
+	background-size:cover;
+	background-size: 100% 100%;
+}
