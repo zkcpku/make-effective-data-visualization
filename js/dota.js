@@ -20,7 +20,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	var width, margin, height;
 	var xScale, yScale, pScale;
 	//Items for x axis
-	var items = ['_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage'];
+	var items = ['_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage', '_pick_rate'];
 	//TI count
 	var init = 1;
 	//Item count
