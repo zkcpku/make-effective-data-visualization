@@ -40,12 +40,12 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	var data_global;
 	//Solve Chrome wrong width after refresh
 	$(window).load(function() {
-		width = $("#plot_container").width();
-		margin = width * 0.07;
-		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		height = height*0.95;
-		xScale = d3.scale.linear().range([margin,width-margin]);
-		if (data_global != null) plot(data_global);
+		if (width != $("#plot_container").width()) {
+			width = $("#plot_container").width();
+			margin = width * 0.07;
+			xScale = d3.scale.linear().range([margin,width-margin]);
+			update();
+		}
 	});
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
