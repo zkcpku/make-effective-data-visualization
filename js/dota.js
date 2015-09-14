@@ -45,7 +45,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
 		for (item in items) {
-			var itemName = items[item].replace("_avg_", "").replace("_", " ").toUpperCase();
+			var itemName = items[item].replace("_avg_", "").replace(/_/g, " ").toUpperCase();
 			var ele = "<li><a ng-click=\"setItem\("+ item +"\)\">"+ itemName +"</li></a>";
 			var _ele = $compile(ele)(scope);
 			$(".dropdown-menu").append(_ele);
@@ -144,7 +144,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("dy", "1em")
 			.style("text-anchor", "middle")
 			.text("Win Rate");
-		var xlabel = items[_init].replace("_avg_", "Average ").replace("_", " ").toUpperCase();
+		var xlabel = items[_init].replace("_avg_", "Average ").replace(/_/g, " ").toUpperCase();
 		svg.append("text")
 			.attr("class", "xlabel")
 			.attr("y", height-0.5*margin)
@@ -245,7 +245,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("#info #ban_text").text("Ban: "+ Number(d[init + "_ban"]));
 		$(".custom_text").remove();
 		for (item in items){
-			var nametag = items[item].replace("_avg_", "").replace("_", " ").capitalize();
+			var nametag = items[item].replace("_avg_", "").replace(/_/g, " ").capitalize();
 			nametag += ": ";
 			$("#info #ban_text").after('<h4 class="custom_text">' +nametag + Number(d[init + items[item]]).toFixed(2)+"</h4>");
 		}
@@ -307,7 +307,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		xScale.domain([0,getMax()]).nice();
 		var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
 		d3.select(".xaxis").transition().call(xAxis);
-		var xlabel = items[_init].replace("_avg_", "Average ").replace("_", " ").toUpperCase();
+		var xlabel = items[_init].replace("_avg_", "Average ").replace(/_/g, " ").toUpperCase();
 		d3.select(".xlabel").text(xlabel);
 		//Update circle radius and location
 		d3.select('svg').selectAll("circle")
