@@ -22,13 +22,6 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	var margin = width * 0.07;
 	var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	height = height*0.95;
-	$(window).load(function() {
-		width = $("#plot_container").width();
-		margin = width * 0.07;
-		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		height = height*0.95;
-		if (data_global != null) plot(data_global);
-	});
 
 	//Set scale for x axis and y axis
 	var xScale = d3.scale.linear().range([margin,width-margin]);
@@ -45,6 +38,15 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	//Lock for hover function
 	var lock = false;
 	var data_global;
+	//Solve Chrome wrong width after refresh
+	$(window).load(function() {
+		width = $("#plot_container").width();
+		margin = width * 0.07;
+		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		height = height*0.95;
+		xScale = d3.scale.linear().range([margin,width-margin]);
+		if (data_global != null) plot(data_global);
+	});
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
 		for (item in items) {
