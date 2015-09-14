@@ -13,7 +13,7 @@ body {
 	background-size: 100% 100%;
 }
 body:after {
-	content: url(/images/1.png) url(/images/2.png) url(/images/3.png) url(/images/4.png) url(/images/5.png);
+	content: url(images/1.png) url(images/2.png) url(images/3.png) url(images/4.png) url(images/5.png);
 	display: none;
 }
 #info{
@@ -27,12 +27,12 @@ body:after {
 	width:100%;
 }
 .tibutton-n {
-	background-image: url("/images/next.png");
+	background-image: url("images/next.png");
 	background-size:cover;
 	background-size: 100% 100%;
 }
 .tibutton-p {
-	background-image: url("/images/pre.png");
+	background-image: url("images/pre.png");
 	background-size:cover;
 	background-size: 100% 100%;
 }
