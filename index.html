@@ -15,49 +15,70 @@
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
+      .tibutton{
+
+        background: transparent;
+        color: #F2F2F2;
+
+        /* CSS Transition */
+        -webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
+        -moz-transition: background .2s ease-in-out, border .2s ease-in-out;
+        -ms-transition: background .2s ease-in-out, border .2s ease-in-out;
+        -o-transition: background .2s ease-in-out, border .2s ease-in-out;
+        transition: background .2s ease-in-out, border .2s ease-in-out;
+
+      }
+      body{
+        background-size:cover;
+        background-size: 100% 100%;
+      }
       #info{
-        padding-top:5%;
+        height:100%;
+        padding:1%;
+        border-style: solid;
+        border-width: 5px;
+        word-wrap: break-word;
       }
       #info img{
         width:100%;
       }
       .tibutton-n {
-            background-image: url("images/next.png");
-            background-size:cover;
-            background-size: 100% 100%;
-       }
+        background-image: url("images/next.png");
+        background-size:cover;
+        background-size: 100% 100%;
+      }
       .tibutton-p {
-            background-image: url("images/pre.png");
-            background-size:cover;
-            background-size: 100% 100%;
-          }
+        background-image: url("images/pre.png");
+        background-size:cover;
+        background-size: 100% 100%;
+      }
     </style>
   </head>
   <body ng-app="myApp">
     <div class="container-fluid">
       <div class="row">
         <a ng-click="previousTI()" class="col-xs-1 btn btn-default tibutton tibutton-p"></a>
-        <div id="plot_container" class="col-xs-9">
+        <div id="plot_container" class="col-xs-8">
           <scatter-plot></scatter-plot>
         </div>
         <a ng-click="nextTI()" class="col-xs-1 btn btn-default tibutton tibutton-n"></a>
-        <div id="info" class="col-xs-1">
+        <div id="info" class="col-xs-2">
           <img></img>
-          <h2 id="hero_text"></h2>
+          <h3 id="hero_text"></h3>
           <h4 id="win_text"></h4>
           <h4 id="pick_text"></h4>
           <h4 id="ban_text"></h4>
         </div>
       </div>
     </div>
-        <a id="next-item" ng-click="nextItem()" class="btn btn-default"><span aria-hidden="true">»</span></a>
-        <a id="previous-item" ng-click="previousItem()" class="btn btn-default"><span aria-hidden="true">«</span></a>
-        <div id="dropup1" class="dropup">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 6px;">
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-          </ul>
-        </div>
+    <a id="next-item" ng-click="nextItem()" class="btn btn-default"><span aria-hidden="true">»</span></a>
+    <a id="previous-item" ng-click="previousItem()" class="btn btn-default"><span aria-hidden="true">«</span></a>
+    <div id="dropup1" class="dropup">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 6px;">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      </ul>
+    </div>
   </body>
 </html>
