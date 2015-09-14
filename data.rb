@@ -63,7 +63,7 @@ def convertLeague(id)
   when 2733
     return 5
   else
-    raise 'League Error'
+    return 3
   end
 end
 
@@ -80,11 +80,11 @@ def setMatch(match, data, matches)
   data[:heroes] = all_heroes
   ban = []
   if not match.drafts.nil?
-   match.drafts.each do |d|
-    if not d.pick?
-      ban << d.hero.id 
+    match.drafts.each do |d|
+      if not d.pick?
+        ban << d.hero.id 
+      end
     end
-   end
   end
   data[:ban] = ban
   data[:duration] = match.duration/60
@@ -101,66 +101,68 @@ def process(file)
 
   File.readlines(file).each do |line|
     id = line.to_i
-
-    match = api.matches(id)
-    while match.nil?
+    if (matches.find(:match_id => id).count == 1)
+      puts 'pass'
+    else
       match = api.matches(id)
-    end
-
-    match_data = {:match_id => nil,
-      :league => nil,
-      :heroes => nil,
-      :ban => nil,
-      :duration => nil,
-      :starts_at => nil,
-    }
-    hero_data = {:match_id => nil,
-      :player_id => nil,
-      :team => nil,
-      :hero => nil,
-      :level => nil,
-      :K => nil,
-      :D => nil,
-      :A => nil,
-      :gold => nil,
-      :LH => nil,
-      :DN => nil,
-      :XPM => nil,
-      :GPM => nil,
-      :result => nil,
-      :hero_damage => nil,
-      :tower_damage => nil,
-      :league => nil
-    }
-
-    if match.players_count == 10
-      setMatch(match,match_data,matches)
-
-      hero_data[:match_id] = match.id
-      hero_data[:league] = convertLeague(match.league_id)
-
-      if match.winner == :radiant
-        hero_data[:result] = 'w'
-      else
-        hero_data[:result] = 'l'
+      while match.nil?
+        match = api.matches(id)
       end
 
-      hero_data[:team] = match.radiant.name
-      players = match.radiant.players
+      match_data = {:match_id => nil,
+        :league => nil,
+        :heroes => nil,
+        :ban => nil,
+        :duration => nil,
+        :starts_at => nil,
+      }
+      hero_data = {:match_id => nil,
+        :player_id => nil,
+        :team => nil,
+        :hero => nil,
+        :level => nil,
+        :K => nil,
+        :D => nil,
+        :A => nil,
+        :gold => nil,
+        :LH => nil,
+        :DN => nil,
+        :XPM => nil,
+        :GPM => nil,
+        :result => nil,
+        :hero_damage => nil,
+        :tower_damage => nil,
+        :league => nil
+      }
 
-      setPlayers(players,hero_data,heroes)
+      if match.players_count == 10
+        setMatch(match,match_data,matches)
 
-      if match.winner == :dire
-        hero_data[:result] = 'w'
-      else
-        hero_data[:result] = 'l'
-      end
+        hero_data[:match_id] = match.id
+        hero_data[:league] = convertLeague(match.league_id)
 
-      hero_data[:team] = match.dire.name
-      players = match.dire.players
+        if match.winner == :radiant
+          hero_data[:result] = 'w'
+        else
+          hero_data[:result] = 'l'
+        end
 
-      setPlayers(players,hero_data,heroes)
+        hero_data[:team] = match.radiant.name
+        players = match.radiant.players
 
+        setPlayers(players,hero_data,heroes)
+
+        if match.winner == :dire
+          hero_data[:result] = 'w'
+        else
+          hero_data[:result] = 'l'
+        end
+
+        hero_data[:team] = match.dire.name
+        players = match.dire.players
+
+        setPlayers(players,hero_data,heroes)
+      end 
     end
   end
 end
@@ -172,56 +174,64 @@ def addLeagueCount()
   (1..5).each do |n|
     ti_count << heroes.find(:league => n).count
   end
-  ti_count
+  (1..5).each do |n|
+    heroes.find(:league => n).update_many("$set" => {:ti_count =>ti_count[n-1]})
+  end
+
 end
 
 def aggregate()
   client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'dota_ti')
   heroes = client["heroes"]
   aggregation = heroes.find().aggregate([
-    { "$group" => {"_id" => {'hero' => "$hero", 'league' => "$league", 'ti_count' => "$ti_count"},
-                   "count" => {"$sum" => 1},
-                   "win_count" => {"$sum" => {"$cond" => [{"$eq" => ["$result","w"]},1,0]}},
-                   "avg_gpm" => {"$avg" => "$GPM"}, 
-                   "avg_level" => {"$avg" => "$level"},
-                   "avg_K" => {"$avg" => "$K"}, 
-                   "avg_D" => {"$avg" => "$D"},
-                   "avg_A" => {"$avg" => "$A"},
-                   "avg_xpm" => {"$avg" => "$XPM"},
-                   "avg_hero_damage" => {"$avg" => "$hero_damage"},
-                   "avg_tower_damage" => {"$avg" => "$tower_damage"}}},
-    { "$project" => {"win_rate" => {"$divide" => ["$win_count", "$count"]},
-                     "pick_rate" => {"$divide" => ["$count", "$_id.ti_count"]},
-                     "count" => 1,
-                     "win_count" => 1,
-                     "league" => "$_id.league",
-                     "hero" => "$_id.hero",
-                     "avg_xpm" => 1,
-                     "avg_gpm" => 1,
-                     "avg_level" => 1,
-                     "avg_K" => 1,
-                     "avg_D" => 1,
-                     "avg_A" => 1,
-                     "avg_hero_damage" => 1,
-                     "avg_tower_damage" => 1}},
-    { "$project" => {"_id" => 0,
-                     "hero" => 1,
-                     "league" => 1,
-                     "pick" => "$count",
-                     "pick_rate" => 1,
-                     "win_rate" => 1,
-                     "avg_xpm" => 1,
-                     "avg_gpm" => 1,
-                     "avg_level" => 1,
-                     "avg_K" => 1,
-                     "avg_D" => 1,
-                     "avg_A" => 1,
-                     "avg_hero_damage" => 1,
-                     "avg_tower_damage" => 1}},
-    { "$sort" => {"league" => 1, "hero" => 1}} 
-   ])
-  
+                                        { "$group" => {"_id" => {'hero' => "$hero", 'league' => "$league", 'ti_count' => "$ti_count"},
+                                          "count" => {"$sum" => 1},
+                                          "win_count" => {"$sum" => {"$cond" => [{"$eq" => ["$result","w"]},1,0]}},
+                                          "avg_gpm" => {"$avg" => "$GPM"}, 
+                                          "avg_level" => {"$avg" => "$level"},
+                                          "avg_K" => {"$avg" => "$K"}, 
+                                          "avg_D" => {"$avg" => "$D"},
+                                          "avg_A" => {"$avg" => "$A"},
+                                          "avg_xpm" => {"$avg" => "$XPM"},
+                                          "avg_hero_damage" => {"$avg" => "$hero_damage"},
+                                          "avg_tower_damage" => {"$avg" => "$tower_damage"}}},
+                                          { "$project" => {"win_rate" => {"$divide" => ["$win_count", "$count"]},
+                                            "pick_rate" => {"$divide" => ["$count", "$_id.ti_count"]},
+                                            "count" => 1,
+                                            "win_count" => 1,
+                                            "league" => "$_id.league",
+                                            "hero" => "$_id.hero",
+                                            "avg_xpm" => 1,
+                                            "avg_gpm" => 1,
+                                            "avg_level" => 1,
+                                            "avg_K" => 1,
+                                            "avg_D" => 1,
+                                            "avg_A" => 1,
+                                            "avg_hero_damage" => 1,
+                                            "avg_tower_damage" => 1}},
+                                            { "$project" => {"_id" => 0,
+                                              "hero" => 1,
+                                              "league" => 1,
+                                              "pick" => "$count",
+                                              "pick_rate" => 1,
+                                              "win_rate" => 1,
+                                              "avg_xpm" => 1,
+                                              "avg_gpm" => 1,
+                                              "avg_level" => 1,
+                                              "avg_K" => 1,
+                                              "avg_D" => 1,
+                                              "avg_A" => 1,
+                                              "avg_hero_damage" => 1,
+                                              "avg_tower_damage" => 1}},
+                                              { "$sort" => {"league" => 1, "hero" => 1}}
+  ])
+  output = client["output"]
+  aggregation.each do |d|
+    output.insert_one(d)
+  end
+
 end
+
 
 def outputFields()
   client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'dota_ti')
@@ -237,7 +247,7 @@ def addBan()
   client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'dota_ti')
   matches = client["matches"]
   arr = []
-  CSV.foreach('test.csv', :headers =>true) do |row|
+  CSV.foreach('data.csv', :headers =>true) do |row|
     item = row.to_hash
     league = item["league"].to_i
     hero = item["hero"].to_i
@@ -291,4 +301,4 @@ def merge()
   File.open('dota.json', 'w'){|f| f.write(output.to_json)}
 end
 
-merge
+merge()
