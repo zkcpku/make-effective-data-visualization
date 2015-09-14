@@ -17,20 +17,10 @@ jQuery.fn.invisible = function() {
 var app=angular.module('myApp',[]);
 
 app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
-	//Set width, margin and height
-	var width = $("#plot_container").width();
-	var margin = width * 0.07;
-	var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	height = height*0.95;
-
-	//Set scale for x axis and y axis
-	var xScale = d3.scale.linear().range([margin,width-margin]);
-	var yScale = d3.scale.linear().domain([0,1]).range([height-margin,margin]);
-	//Set scale for the radius of circle
-	var pScale = d3.scale.pow().exponent(0.5).range([height/120,height/50]);
+	var width, margin, height;
+	var xScale, yScale, pScale;
 	//Items for y axis
 	var items = ['_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage'];
-
 	//TI count
 	var init = 1;
 	//Item count
@@ -38,15 +28,20 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	//Lock for hover function
 	var lock = false;
 	var data_global;
-	//Solve Chrome wrong width after refresh
-	$(window).load(function() {
-		if (width != $("#plot_container").width()) {
-			width = $("#plot_container").width();
-			margin = width * 0.07;
-			xScale = d3.scale.linear().range([margin,width-margin]);
-			update();
-		}
-	});
+	//Set variables
+	function setVariables() {
+		//Set width, margin and height
+		width = $("#plot_container").width();
+		margin = width * 0.07;
+		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		height = height*0.95;
+
+		//Set scale for x axis and y axis
+		xScale = d3.scale.linear().range([margin,width-margin]);
+		yScale = d3.scale.linear().domain([0,1]).range([height-margin,margin]);
+		//Set scale for the radius of circle
+		pScale = d3.scale.pow().exponent(0.5).range([height/120,height/50]);
+	}
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
 		for (item in items) {
@@ -124,7 +119,10 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	}
 
 	function link(scope,element,attr){
-		initialize(scope, element);
+		$(window).load(function() {
+			setVariables();
+			initialize(scope, element);
+		});
 	}
 
 
