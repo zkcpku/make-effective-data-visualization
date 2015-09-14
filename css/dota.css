@@ -1,4 +1,7 @@
 .tibutton, .tibutton:hover {
+	vertical-align: middle;
+	margin-top: 15%;
+	border: 0;
 	background: transparent;
 	color: #F2F2F2;
 	/* CSS Transition */

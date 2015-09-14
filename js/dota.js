@@ -19,7 +19,7 @@ var app=angular.module('myApp',[]);
 app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
 	var width, margin, height;
 	var xScale, yScale, pScale;
-	//Items for y axis
+	//Items for x axis
 	var items = ['_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage'];
 	//TI count
 	var init = 1;
@@ -95,8 +95,6 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		scope.nextItem = nextItem;
 		scope.previousItem = previousItem;
 		scope.setItem = setItem;
-		//Hide info panel
-		$("#info").invisible();
 		//Add drop-up menu
 		addDropMenu(scope);
 		//Set background image
@@ -112,8 +110,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("id", "myImg")
 			.attr("height", 0)
 			.attr("width", 0);
-		//Set ti button height
-		$(".tibutton").height($("#plot").height()*0.9);
+		//Set ti button height and location
+		$(".tibutton").height($("#plot").height()*0.2);
 		//Load data
 		d3.json("data/dota.json",function(d){plot(d)});
 	}
