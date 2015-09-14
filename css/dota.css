@@ -1,4 +1,4 @@
-.tibutton {
+.tibutton, .tibutton:hover {
 	background: transparent;
 	color: #F2F2F2;
 	/* CSS Transition */
@@ -7,7 +7,7 @@
 	-ms-transition: background .2s ease-in-out, border .2s ease-in-out;
 	-o-transition: background .2s ease-in-out, border .2s ease-in-out;
 	transition: background .2s ease-in-out, border .2s ease-in-out;
-      }
+}
 body {
 	background-size:cover;
 	background-size: 100% 100%;
@@ -26,12 +26,12 @@ body:after {
 #info img{
 	width:100%;
 }
-.tibutton-n {
+.tibutton-n, .tibutton-n:hover {
 	background-image: url("../images/next.png");
 	background-size:cover;
 	background-size: 100% 100%;
 }
-.tibutton-p {
+.tibutton-p, .tibutton-p:hover {
 	background-image: url("../images/pre.png");
 	background-size:cover;
 	background-size: 100% 100%;
