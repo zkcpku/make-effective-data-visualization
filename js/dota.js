@@ -22,6 +22,12 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	var margin = width * 0.07;
 	var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	height = height*0.95;
+	$(window).load(function() {
+		width = $("#plot_container").width();
+		margin = width * 0.07;
+		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		height = height*0.95;
+	});
 
 	//Set scale for x axis and y axis
 	var xScale = d3.scale.linear().range([margin,width-margin]);
