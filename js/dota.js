@@ -27,6 +27,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		margin = width * 0.07;
 		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 		height = height*0.95;
+		if (data_global != null) plot(data_global);
 	});
 
 	//Set scale for x axis and y axis
