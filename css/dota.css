@@ -1,3 +1,6 @@
+p {
+	font-weight: bold;
+}
 .tibutton, .tibutton:hover {
 	vertical-align: middle;
 	margin-top: 15%;

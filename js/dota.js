@@ -17,6 +17,7 @@ jQuery.fn.invisible = function() {
 var app=angular.module('myApp',[]);
 
 app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
+
 	var width, margin, height;
 	var xScale, yScale, pScale;
 	//Items for x axis
@@ -160,7 +161,9 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr('text-anchor', 'middle')
 			.text('The International ' + init)
 			.attr("font-family", "sans-serif")
-			.attr("font-size", "20px");
+			.attr("font-size", "20px")
+			.on("mouseover", function(d){showTitle(d);})
+			.on("mouseout", function(d){showTerms();});
 		//Draw scatter plot
 		draw(data);	
 		setButton();
@@ -236,20 +239,38 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.on("mouseout", function(d){unhover(d);});
 	}
 
-	//Set text of info panel
-	function setInfo(d){
-		$("#info img").attr("src", "images/heroes-sb/"+d.hero+".png");
-		$("#info #hero_text").text(d.name);
-		$("#info #win_text").text("Win: "+ (Number(d[init + "_win_rate"])*100).toFixed(2) + "%");
-		$("#info #pick_text").text("Pick: "+ Number(d[init + "_pick"]));
-		$("#info #ban_text").text("Ban: "+ Number(d[init + "_ban"]));
+	//Set and show hero text of info panel
+	function showInfo(d){
+		$("#info-bubble img").attr("src", "images/heroes-sb/"+d.hero+".png");
+		$("#hero_text").text(d.name);
+		$("#win_text").text("Win: "+ (Number(d[init + "_win_rate"])*100).toFixed(2) + "%");
+		$("#pick_text").text("Pick: "+ Number(d[init + "_pick"]));
+		$("#ban_text").text("Ban: "+ Number(d[init + "_ban"]));
 		$(".custom_text").remove();
 		for (item in items){
 			var nametag = items[item].replace("_avg_", "").replace(/_/g, " ").capitalize();
 			nametag += ": ";
-			$("#info #ban_text").after('<h4 class="custom_text">' +nametag + Number(d[init + items[item]]).toFixed(2)+"</h4>");
+			$("#ban_text").after('<h4 class="custom_text">' +nametag + Number(d[init + items[item]]).toFixed(2)+"</h4>");
 		}
-		$("#info").visible();
+		$("#info-terms").hide();
+		$("#info-title").hide();
+		$("#info-bubble").show();
+	}
+	
+	//Display description for the tournament
+	function showTitle(d) {
+		$("#info-terms").hide();
+		$("#info-bubble").hide();
+		$("#info-title p").hide();
+		$("#info-title").show();
+		$("#info-title-" + init).show();
+	}
+	
+	//Show terms
+	function showTerms() {
+		$("#info-bubble").hide();
+		$("#info-title").hide();
+		$("#info-terms").show();
 	}
 
 	
@@ -261,7 +282,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			d3.select("#circle"+d.hero)
 				.style('opacity', 1)
 				.attr("r", 1.5*getSize()(d));
-			setInfo(d);
+			showInfo(d);
 			setButton();
 			lock = true;
 		}
@@ -274,7 +295,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 				.style('opacity', 0.6);
 			d3.select("#circle"+d.hero)
 				.attr("r", getSize()(d));
-			$("#info").invisible();
+			showTerms();
 			lock = false;
 		}
 	}
@@ -329,6 +350,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		setButton();
 
 	}
+
 
 
 	return {
