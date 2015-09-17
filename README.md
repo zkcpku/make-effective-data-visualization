@@ -8,7 +8,7 @@ This is a visualization on the total five international tournaments(from ti1 to 
 
 ### Initial Design
 
-Since the large number of heroes in Dota2, I choose the bubble chart to visualize the performance of all the heroes in a single international tournament. Also with the hope that the movement of the bubble can show the evolving of Dota2 tournament games.
+Since the large number of heroes in Dota2, I choose the bubble chart to visualize the performance of all the heroes in a single international tournament. As a variation of a scatter plot, not only can the bubble chart visualize each hero's performance values through the xy location, but it can also give intuition of other information to readers through the size and pattern of the bubble. Also with the hope that the movement of the bubble can show the variation of heroes with the evolving of Dota2 tournament games.
 
 Visual encodings:
 
@@ -27,6 +27,8 @@ Some changes after feedback:
 - Change the size of the bubbles.
 - Add pick rate on the x-axis.
 - Enlarge and beautify the information panel.
+- Add terms explanation and some introductory to the visualization
+- Add a walk through
 
 ## Feedback:
 
@@ -40,6 +42,9 @@ Some changes after feedback:
 > um... ti3? not sure how you can say ti5 was well balanced when at ti5 there were basically 2 viable strategies (secret's qop/sf semi-carries and cdec's gyro/pl hyperaggression). ti3 had insane variety, with many teams basically having a meta of their own. the ti3 finals featured a clash of two completely different play styles, each of which was very viable. As for enjoyable, that's obv up to each person to decide, but id say ti3 wins there too -- the days of fun tri v tri action (gyro, weaver, lifestealer were popular carries, cm, visage, naga popular supports), epic base races and late game fights, and of course insane wisp plays from many teams
 
 - More feedbacks in this [post](https://www.reddit.com/r/DotA2/comments/3kxa8o/from_ti1_to_ti5/)
+
+- From Udacity coach
+> I had trouble understanding the chart until after I read the README file. Please add more context to the chart explaining what the chart represents. It could be with a short paragraph explaining to the reader what this game is and how it is played, what "international 1" vs the other international numbers mean, etc. It would also be helpful if the x-axis variables were explained to the reader. Also the chart titles could be more detailed.
 
 ## Resources
 [Dota2 Web API](https://wiki.teamfortress.com/wiki/WebAPI)
