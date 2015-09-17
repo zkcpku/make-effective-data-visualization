@@ -16,8 +16,16 @@ jQuery.fn.invisible = function() {
 
 var app=angular.module('myApp',[]);
 
-app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
 
+app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
+	// Instance the tour
+	var tour = new Tour({storage: false});
+	// Add steps
+	tour.addSteps([
+		{ element: "#plot", title: "Story of TI", content: "The International (TI) is an annual electronic sports Dota 2 championship tournament. This visualization shows the overall performance of heroes picked in each TI." }, 
+		{ element: "#circle14", title: "Hero", content: "Hover on the hero to see detailed information. The larger the circle, the more number of bans and picks of that hero." }, 
+		{ element: ".tibutton-n", title: "Next", content: "Click here to move to the next TI." }, 
+		{ element: "#dropdownMenu3", title: "Change X", content: "You can change the data of the x axis." } ]);
 	var width, margin, height;
 	var xScale, yScale, pScale;
 	//Items for x axis
@@ -118,9 +126,13 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	}
 
 	function link(scope,element,attr){
+		//Initialize tour
+		tour.init();
 		$(window).load(function() {
 			setVariables();
 			initialize(scope, element);
+			//Start tour
+			tour.start();
 		});
 	}
 
