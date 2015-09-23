@@ -53,6 +53,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	}
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
+		$(".dropdown-menu").children().remove();
 		for (item in items) {
 			var itemName = items[item].replace("_avg_", "").replace(/_/g, " ").toUpperCase();
 			var ele = "<li><a ng-click=\"setItem\("+ item +"\)\">"+ itemName +"</li></a>";
@@ -113,7 +114,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.append("svg")
 			.attr("id", "plot")
 			.attr("transform", "translate(0,"+ 80 + ")")
-			.attr('width', width).attr('height', height);
+			.attr("width", width)
+			.attr("height", height);
 		d3.select(element[0])
 			.append("svg")
 			.attr("id", "myImg")
@@ -125,6 +127,14 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		d3.json("data/dota.json",function(d){plot(d)});
 	}
 
+	//Repaint graph
+	function resize(scope, element) {
+		$("#plot").remove();
+		$("#myImg").remove();
+		setVariables();
+		initialize(scope, element);
+	}
+
 	function link(scope,element,attr){
 		//Initialize tour
 		tour.init();
@@ -133,6 +143,10 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			initialize(scope, element);
 			//Start tour
 			tour.start();
+		});
+		//Repaint when resize
+		$(window).resize(function() {
+			resize(scope, element);
 		});
 	}
 
@@ -308,6 +322,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			d3.select("#circle"+d.hero)
 				.attr("r", getSize()(d));
 			showTerms();
+			setButton();
 			lock = false;
 		}
 	}
@@ -324,11 +339,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 
 	//Get the max value of the radius domain data
 	function getMaxSize() {
-		var arr = [];
-		for (i=1; i < 6; i++) {
-			arr.push(d3.max(data_global, function(d){return +(+d[i+'_pick']+d[i+'_ban']);}));
-		}
-		var maxVal = Math.max.apply(Math, arr);
+		var maxVal = d3.max(data_global, function(d){return +(+d[init+'_pick']+d[init+'_ban']);});
 		return maxVal;
 	}
 
@@ -338,6 +349,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("body").css("background-image", "url(images/"+init+".png)");
 		//Update x axis and its label
 		xScale.domain([0,getMax()]).nice();
+		//Update scale for size
+		pScale.domain([0,getMaxSize()]);
 		var xAxis = d3.svg.axis().orient('bottom').scale(xScale);
 		d3.select(".xaxis").transition().call(xAxis);
 		var xlabel = items[_init].replace("_avg_", "Average ").replace(/_/g, " ").toUpperCase();
