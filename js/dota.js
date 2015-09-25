@@ -107,8 +107,6 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		scope.setItem = setItem;
 		//Add drop-up menu
 		addDropMenu(scope);
-		//Set background image
-		$("body").css("background-image", "url(images/"+init+".png)");
 		//Append SVG
 		d3.select(element[0])
 			.append("svg")
@@ -185,7 +183,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr('x', width/2)
 			.attr('y', margin/2)
 			.attr('text-anchor', 'middle')
-			.text('The International ' + init)
+			.text('The International 201' + init)
 			.attr("font-family", "sans-serif")
 			.attr("font-size", "20px")
 			.on("mouseover", function(d){showTitle(d);})
@@ -343,10 +341,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		return maxVal;
 	}
 
-	//Update the plot and background
+	//Update the plot 
 	function update() {
-		//Update background image
-		$("body").css("background-image", "url(images/"+init+".png)");
 		//Update x axis and its label
 		xScale.domain([0,getMax()]).nice();
 		//Update scale for size
@@ -370,7 +366,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("r", getSize());
 		//Update title
 		d3.select('.title')
-			.text('The International ' + init);
+			.text('The International 201' + init);
 		//Update button location
 		setButton();
 
