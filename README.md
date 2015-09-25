@@ -21,7 +21,7 @@ Visual encodings:
 
 Some changes after feedback:
 
-v1-v3:
+v0.1-v0.3:
 
 - Add theme background with each tournament.
 - Fix data error in the third tournament.
@@ -32,7 +32,7 @@ v1-v3:
 - Add terms explanation and some introductory to the visualization.
 - Add a walk through.
 
-v4:
+v0.4:
 
 - Rescale circle size.
 - Remove background image.
