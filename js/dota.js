@@ -265,7 +265,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("cy", function(d){
 				value = +d[init +'_win_rate'];
 				if (isNaN(value)) return -100;
-				else return yScale(value)-10;})
+				else return yScale(value);})
 			.attr("r",getSize())
 			.attr("fill",function(d){return "url(#hero" + d.hero + ")";})
 			.attr("id", function(d){return "circle"+d.hero;})
@@ -373,7 +373,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("cy", function(d){
 				value = +d[init +'_win_rate'];
 				if (isNaN(value)) return -100;
-				else return yScale(value)-10;})
+				else return yScale(value);})
 			.attr("r", getSize());
 		//Update title
 		d3.select('.title')

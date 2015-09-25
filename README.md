@@ -8,7 +8,7 @@ This is a visualization on the total five international tournaments(from ti1 to 
 
 ### Initial Design
 
-Since the large number of heroes in Dota2, I choose the bubble chart to visualize the performance of all the heroes in a single international tournament. As a variation of a scatter plot, not only can the bubble chart visualize each hero's performance values through the xy location, but it can also give intuition of other information to readers through the size and pattern of the bubble. Also with the hope that the movement of the bubble can show the variation of heroes with the evolving of Dota2 tournament games.
+Since the large number of heroes in Dota2, I choose the bubble chart to visualize the performance of all the heroes in a single international tournament. As a variation of a scatter plot, not only can the bubble chart visualize each hero's performance values through the xy location, but it can also give intuition of other information to readers through the size and pattern of the bubble. Also with the hope that the movement of the bubble can show the variation of heroes with the evolving of Dota2 tournament games. The visualisation is mainly targeted to dota 2 fans. Choosing win rate as the invariant y-axis is because the win rate is one of the most important metrics to judge a hero on a single tournament although that is not necessarily true when the number of picks is low. But apart from the win rate, there remains a lot of metrics of the single hero. All these metrics may reveal some part of the hero performance in the tournament. The viewers can explore the data on their own with these metrics. That is why so much freedom is given to the viewer over x-axis.
 
 Visual encodings:
 
@@ -21,14 +21,27 @@ Visual encodings:
 
 Some changes after feedback:
 
+v1-v3:
+
 - Add theme background with each tournament.
 - Fix data error in the third tournament.
 - Redesign the left and right buttons to make the UI clear.
 - Change the size of the bubbles.
 - Add pick rate on the x-axis.
 - Enlarge and beautify the information panel.
-- Add terms explanation and some introductory to the visualization
-- Add a walk through
+- Add terms explanation and some introductory to the visualization.
+- Add a walk through.
+
+v4:
+
+- Rescale circle size.
+- Remove background image.
+- Accurate the scale at 0% and 100% y-axis.
+- Put my own findings of the plot in the tour.
+- Change title number to year for clarification.
+- Switch default x-axis data to pick rate value.
+- Add initial design explain.
+- Add another feedback from Udacity.
 
 ## Feedback:
 
@@ -45,6 +58,9 @@ Some changes after feedback:
 
 - From Udacity coach
 > I had trouble understanding the chart until after I read the README file. Please add more context to the chart explaining what the chart represents. It could be with a short paragraph explaining to the reader what this game is and how it is played, what "international 1" vs the other international numbers mean, etc. It would also be helpful if the x-axis variables were explained to the reader. Also the chart titles could be more detailed.
+
+- From another coach
+> I don't think this is dependent on the viewer having a deep understanding of the subject matter; a story should be visible even to a non-expert. For example, I might not understand what an "Assist" is, but I should be able to see something interesting about how they've changed over time, how they're distributed between different heroes, or something else.
 
 ## Resources
 [Dota2 Web API](https://wiki.teamfortress.com/wiki/WebAPI)
