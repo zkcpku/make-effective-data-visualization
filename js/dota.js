@@ -19,17 +19,28 @@ var app=angular.module('myApp',[]);
 
 app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
 	// Instance the tour
-	var tour = new Tour({storage: false});
+	var tour = new Tour({storage: false, onEnd: function(tour){lock=false;}});
 	// Add steps
 	tour.addSteps([
-		{ element: "#plot", title: "Story of TI", content: "The International (TI) is an annual electronic sports Dota 2 championship tournament. This visualization shows the overall performance of heroes picked in each TI." }, 
-		{ element: "#circle14", title: "Hero", content: "Hover on the hero to see detailed information. The larger the circle, the bigger the total number of bans and picks of that hero." }, 
-		{ element: ".tibutton-n", title: "Next", content: "Click here to move to the next TI." }, 
-		{ element: "#dropdownMenu3", title: "Change X", content: "You can change the data of the x axis." } ]);
+		{ element: "#plot", title: "Story of TI", content: "The International (TI) is an annual electronic sports Dota 2 championship tournament. This visualization shows the overall performance of heroes picked in each TI." },
+		 { element: ".title", title: "The First Internatinal", content: "Only limited number of heroes are picked in the tournament. There is no banning rule in this tournament. See how popular Windranger, Vengeful Spirit and Mirana are in the first tournament." },
+		 { element: ".title", title: "The Second Internatinal", content: "Wow! More heroes are picked in this tournament. Still no banning rule for heroes. See the pick rate drop of previous hot heroes? Now it's time for Leshrac, Tidehunter and Invoker.", onShow: function(tour){init = 2;update();}},
+		 { element: "#plot", title: "The Internatinal 2013", content: "Hoho, huge number of new heroes in this tournament. Insane variaty in TI3 right? The rule of banning heroes are now added.", onShow: function(tour){init = 3;update();}},
+		 { element: "#circle65", title: "Remember the Horror of Bat?", content: "Batrider actually got banned for 172 times in TI3.", onShow: function(tour){init = 3;update();hover(d3.select("#circle65").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle65").datum());}},
+		 { element: "#circle54", title: "Gold Carry", content: "Lifestealer became the hottest carry in TI3.", onShow: function(tour){init = 3;update();hover(d3.select("#circle54").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle54").datum());}},
+		 { element: "#plot", title: "The Internatinal 2014", content: "Time for TI4. Unlike the previous years, the tournament was held at the KeyArena, a multi-purpose arena in Seattle Center.", onShow: function(tour){init = 4;update();}},
+		 { element: "#circle9", title: "Hero of the TI4?", content: "A wild mirana appeared everywhere!", onShow: function(tour){init = 4;update();hover(d3.select("#circle9").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle9").datum());}},
+		 { element: "#circle77", title: "The rise of Lycan", content: "Such a high win rate with Lycan! Though it got banned most of the games.", onShow: function(tour){init = 4;update();hover(d3.select("#circle77").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle77").datum());}},
+		 { element: ".title", title: "The Internatinal 2015", content: "Biggest TI ever! Total prize pool is over $18,000,000!", onShow: function(tour){init = 5;update();}},
+		 { element: "#circle105", title: "New hero Techies", content: "Boom! New hero techies with a high win rate of 8 picks.", onShow: function(tour){init = 5;update();hover(d3.select("#circle105").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle105").datum());}},
+		 { element: "#circle52", title: "Leshrac is way too strong!", content: "It either got banned or picked in TI5. Wonder to see what will happen in the next patch.", onShow: function(tour){init = 5;update();hover(d3.select("#circle52").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle52").datum());}},
+		{ element: "#circle17", title: "Hero", content: "Hover on the hero to see detailed information. The larger the circle, the bigger the total number of bans and picks of that hero."}, 
+		{ element: ".tibutton-n", title: "Next", content: "Click the arrow to move around different TIs." }, 
+		{ element: "#dropdownMenu3", title: "Change X", content: "You can change the data of the x axis. Feel free to explore your own TI story. Have fun!" } ]);
 	var width, margin, height;
 	var xScale, yScale, pScale;
 	//Items for x axis
-	var items = ['_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage', '_pick_rate'];
+	var items = ['_pick_rate', '_avg_xpm', '_avg_gpm', '_avg_K', '_avg_D', '_avg_A', '_avg_level', '_avg_hero_damage', '_avg_tower_damage'];
 	//TI count
 	var init = 1;
 	//Item count
@@ -288,6 +299,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("#info-title p").hide();
 		$("#info-title").show();
 		$("#info-title-" + init).show();
+		setButton();
 	}
 	
 	//Show terms
@@ -295,6 +307,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("#info-bubble").hide();
 		$("#info-title").hide();
 		$("#info-terms").show();
+		setButton();
 	}
 
 	
@@ -308,20 +321,18 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 				.attr("r", 1.5*getSize()(d));
 			showInfo(d);
 			setButton();
-			lock = true;
 		}
 	}
 
 	//Restore circles when unhover
 	function unhover(d) {
-		if (lock == true) {
+		if (lock == false) {
 			d3.selectAll('circle')
 				.style('opacity', 0.6);
 			d3.select("#circle"+d.hero)
 				.attr("r", getSize()(d));
 			showTerms();
 			setButton();
-			lock = false;
 		}
 	}
 
