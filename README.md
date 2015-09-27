@@ -61,8 +61,7 @@ v0.4:
 - From Udacity coach
 > I had trouble understanding the chart until after I read the README file. Please add more context to the chart explaining what the chart represents. It could be with a short paragraph explaining to the reader what this game is and how it is played, what "international 1" vs the other international numbers mean, etc. It would also be helpful if the x-axis variables were explained to the reader. Also the chart titles could be more detailed.
 
-- From another coach
-> I don't think this is dependent on the viewer having a deep understanding of the subject matter; a story should be visible even to a non-expert. For example, I might not understand what an "Assist" is, but I should be able to see something interesting about how they've changed over time, how they're distributed between different heroes, or something else.
+- More feedbacks from Udacity coach Mike in this [post](https://discussions.udacity.com/t/p6-feedback-and-questions/32994)
 
 ## Resources
 [Dota2 Web API](https://wiki.teamfortress.com/wiki/WebAPI)

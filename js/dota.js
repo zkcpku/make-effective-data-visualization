@@ -25,7 +25,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		{ element: "#plot", title: "Story of TI", content: "The International (TI) is an annual electronic sports Dota 2 championship tournament. This visualization shows the overall performance of heroes picked in each TI." },
 		 { element: ".title", title: "The First Internatinal", content: "Only limited number of heroes were picked in the tournament. There was no banning rule in this tournament. See how popular Windranger, Vengeful Spirit and Mirana were in the first tournament." },
 		 { element: ".xaxis", title: "The Second Internatinal", content: "Slightly more heroes were picked in this tournament. Still no banning rule for heroes. See the pick rate drop of previous hot heroes? Now it's time for Leshrac, Tidehunter and Invoker.", onShow: function(tour){init = 2;update();}},
-		 { element: "#plot", title: "The Internatinal 2013", content: "Hoho, huge number of new heroes were picked in this tournament. Insane variaty in TI3 right? The rule of banning heroes was added.", onShow: function(tour){init = 3;update();}},
+		 { element: "#plot", title: "The Internatinal 2013", content: "Huge number of new heroes were picked in this tournament. Insane variaty in TI3 right? The rule of banning heroes was added.", onShow: function(tour){init = 3;update();}},
 		 { element: "#circle65", title: "Remember the Horror of Bat?", content: "Batrider actually got banned for 172 times in TI3.", onShow: function(tour){init = 3;update();hover(d3.select("#circle65").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle65").datum());}},
 		 { element: "#circle54", title: "Gold Carry", content: "Lifestealer became the hottest carry in TI3.", onShow: function(tour){init = 3;update();hover(d3.select("#circle54").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle54").datum());}},
 		 { element: "#plot", title: "The Internatinal 2014", content: "Time for TI4. Unlike the previous years, the tournament was held at the KeyArena, a multi-purpose arena in Seattle Center.", onShow: function(tour){init = 4;update();}},
@@ -34,8 +34,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		 { element: ".title", title: "The Internatinal 2015", content: "Biggest TI ever! Total prize pool is over $18,000,000!", onShow: function(tour){init = 5;update();}},
 		 { element: "#circle105", title: "New hero Techies", content: "Boom! New hero techies with a high win rate of 8 picks.", onShow: function(tour){init = 5;update();hover(d3.select("#circle105").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle105").datum());}},
 		 { element: "#circle52", title: "Leshrac is way too strong!", content: "It either got banned or picked in most of the games of TI5. Wonder to see what will happen in the next patch.", onShow: function(tour){init = 5;update();hover(d3.select("#circle52").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle52").datum());}},
-		{ element: "#circle17", title: "Hero", content: "Hover on the hero to see detailed information. The larger the circle, the bigger the total number of bans and picks of that hero."}, 
-		{ element: "#circle17", title: "Click Hero", content: "Click the hero to track the movement. Click again to unlock the track."}, 
+		{ element: "#circle17", title: "Hover and Click", content: "Hover on the hero to see detailed information. The larger the circle, the bigger the total number of bans and picks of that hero. Click the hero to focus on the single hero."}, 
 		{ element: ".tibutton-n", title: "Next", content: "Click the arrow to move around different TIs." }, 
 		{ element: "#dropdownMenu3", title: "Change X", content: "You can change the data of the x axis. Feel free to explore your own TI story. Have fun!" } ]);
 	//Bottom margin is set for unused heroes
@@ -75,12 +74,13 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		height = height*0.99;
 		unusedSize = height * 0.02;
 		initialUnused();
-
 		//Set scale for x axis and y axis
 		xScale = d3.scale.linear().range([margin,width-marginLeftRight]);
 		yScale = d3.scale.linear().domain([0,1]).range([height-marginBottom,marginLeftRight]);
 		//Set scale for the radius of circle
 		pScale = d3.scale.pow().exponent(0.5).range([height/120,height/50]);
+		//Reset lock
+		lock = false;
 	}
 	//Add items to drop-up menu
 	function addDropMenu(scope) {
