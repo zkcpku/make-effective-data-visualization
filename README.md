@@ -42,6 +42,8 @@ v0.4:
 - Switch default x-axis data to pick rate value.
 - Add initial design explain.
 - Add another feedback from Udacity.
+- Show what heroes were not picked in each TI.
+- Let viewer click a single hero to track over TIs.
 
 ## Feedback:
 

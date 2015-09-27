@@ -35,6 +35,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		 { element: "#circle105", title: "New hero Techies", content: "Boom! New hero techies with a high win rate of 8 picks.", onShow: function(tour){init = 5;update();hover(d3.select("#circle105").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle105").datum());}},
 		 { element: "#circle52", title: "Leshrac is way too strong!", content: "It either got banned or picked in most of the games of TI5. Wonder to see what will happen in the next patch.", onShow: function(tour){init = 5;update();hover(d3.select("#circle52").datum());lock=true;}, onNext: function(tour){lock=false;unhover(d3.select("#circle52").datum());}},
 		{ element: "#circle17", title: "Hero", content: "Hover on the hero to see detailed information. The larger the circle, the bigger the total number of bans and picks of that hero."}, 
+		{ element: "#circle17", title: "Click Hero", content: "Click the hero to track the movement. Click again to unlock the track."}, 
 		{ element: ".tibutton-n", title: "Next", content: "Click the arrow to move around different TIs." }, 
 		{ element: "#dropdownMenu3", title: "Change X", content: "You can change the data of the x axis. Feel free to explore your own TI story. Have fun!" } ]);
 	//Bottom margin is set for unused heroes
@@ -288,7 +289,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("id", function(d){return "circle"+d.hero;})
 			.attr('opacity', 0.6)
 			.on("mouseover", function(d){hover(d);})
-			.on("mouseout", function(d){unhover(d);});
+			.on("mouseout", function(d){unhover(d);})
+			.on("click", function(d){hover(d);lock=!lock;});
 	}
 
 	//Set and show hero text of info panel
