@@ -4,6 +4,11 @@
 p {
 	font-weight: bold;
 }
+#myImg{
+	position: absolute;
+	left: -999em;
+	top: -999em;
+}
 .tibutton, .tibutton:hover {
 	vertical-align: middle;
 	margin-top: 15%;
