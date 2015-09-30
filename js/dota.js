@@ -18,6 +18,8 @@ var app=angular.module('myApp',[]);
 
 
 app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile){
+	//Interval promise
+	var promise;
 	// Instance the tour
 	var tour = new Tour({storage: false, onEnd: function(tour){lock=false;}});
 	// Add steps
@@ -51,7 +53,8 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	var _init = 0;
 	//Lock for hover function
 	var lock = false;
-	var lockDict;
+	//Current hover item
+	var current;
 	//Set size on unused hero
 	var unusedSize;
 	var data_global;
@@ -59,7 +62,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 	function initialUnused() {
 		//Set initial location for unused heroes
 		uX = marginLeftRight;
-		uY = height - 0.6*marginBottom;
+		uY = height - 0.4*marginBottom;
 		uDic = {};
 	}
 
@@ -197,15 +200,15 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr("transform", "rotate(-90)")
 			.attr("y", margin/10)
 			.attr("x",- height / 2 + marginBottom/2)
-			.attr("dy", "1em")
+			.attr("dy", "0.35em")
 			.style("text-anchor", "middle")
 			.text("Win Rate");
 		var xlabel = items[_init].replace("_avg_", "Average ").replace(/_/g, " ").toUpperCase();
 		svg.append("text")
 			.attr("class", "xlabel")
-			.attr("y", $(".xaxis").offset().top+0.5*margin)
-			.attr("x", (width / 2))
+			.attr("y", $(".xaxis").offset().top+0.6*margin)
 			.attr("dy", "1em")
+			.attr("x", (width / 2))
 			.style("text-anchor", "middle")
 			.text(xlabel);
 		//Add title
@@ -297,7 +300,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 			.attr('opacity', 0.6)
 			.on("mouseover", function(d){hover(d);})
 			.on("mouseout", function(d){unhover(d);})
-			.on("click", function(d){hover(d);lock=!lock;lockDict = d;});
+			.on("click", function(d){$interval.cancel(promise);showHeroInfo(current);lock=!lock;});
 	}
 
 	//Set and show hero text of info panel
@@ -305,7 +308,6 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("#info-bubble img").attr("src", "images/heroes-sb/"+d.hero+".png");
 		$("#hero_text").text(d.name);
 		if (!isNaN(Number(d[init+"_pick"]))){
-			console.log("test");
 			$("#info-bubble h4").show();
 			$("#win_text").text("Win: "+ (Number(d[init + "_win_rate"])*100).toFixed(2) + "%");
 			$("#pick_text").text("Pick: "+ Number(d[init + "_pick"]));
@@ -323,6 +325,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		$("#info-terms").hide();
 		$("#info-title").hide();
 		$("#info-bubble").show();
+		setButton();
 	}
 	
 	//Display description for the tournament
@@ -347,27 +350,86 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		}
 	}
 
-	
+	//Show detailed info when hover on	
+	//Iterate when multiple heroes overlap
 	function hover(d) {
 		if (lock == false) {
-			//Highlight mouse-on circle and dim other circles
-			d3.selectAll('circle')
-				.style('opacity', 0.1);
-			d3.select("#circle"+d.hero)
-				.style('opacity', 1)
-				.attr("r", 1.5*getSize()(d));
-			showInfo(d);
-			setButton();
+			if (isOverlap(d)) {
+				iterateOverlapHeroes(d);
+			}
+			else {
+				showHeroInfo(d);
+			}
 		}
+	}
+
+	//Judge overlap
+	function isOverlap(d) {
+		var y = +d[init +'_win_rate'];
+		var x = +d[init + items[_init]];
+		if (!isNaN(y) && !isNaN(x)) {
+			y = yScale(y);
+			x = xScale(x);
+			if ($("[cy='" + y + "'][cx='" + x + "']").size() > 1) return true;
+		}
+		return false;
+		
+	}
+
+	//Boost the hover hero and show info panel
+	function showHeroInfo(d) {
+		current = d;
+		d3.selectAll('circle')
+			.style('opacity', 0.1);
+		d3.select("#circle"+d.hero)
+			.style('opacity', 1)
+			.attr("r", 1.5*getSize()(d));
+		showInfo(d);
+		setButton();
+	}
+
+	//Get all the circles that overlap with d
+	function getOverlapData(d) {
+		var y = yScale(+d[init +'_win_rate']);
+		var x = xScale(+d[init + items[_init]]);
+		var overlapData = [];
+		overlapData.push(d);
+		$("[cy='" + y + "'][cx='" + x + "']").each(function(){
+			if ($(this)[0].__data__.hero != d.hero) overlapData.push($(this)[0].__data__);
+		});
+		return overlapData;
+	}
+	
+	//Show overlap heroes at 1 sec interval
+	function iterateOverlapHeroes(d) {
+		var overlapData = getOverlapData(d);
+		showHeroInfo(overlapData[0]);
+		var overlapCounter = 1;
+		promise = $interval(function(){
+			var d = overlapData[overlapCounter];
+			showHeroInfo(d);
+			overlapCounter = overlapCounter + 1;
+			if (overlapCounter > overlapData.length-1) overlapCounter = 0;
+		},1000);
 	}
 
 	//Restore circles when unhover
 	function unhover(d) {
 		if (lock == false) {
+			if (isOverlap(current)) {
+				//Stop the interval and restore size
+				$interval.cancel(promise);
+				var overlapData = getOverlapData(current);
+				for (i = 0; i < overlapData.length; i++) {
+					d3.select("#circle"+overlapData[i].hero).attr("r", getSize()(overlapData[i]));
+				}
+			}
 			d3.selectAll('circle')
 				.style('opacity', 0.6);
 			d3.select("#circle"+d.hero)
 				.attr("r", getSize()(d));
+			d3.select("#circle"+current.hero)
+				.attr("r", getSize()(current));
 			showTerms();
 			setButton();
 		}
@@ -391,9 +453,7 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 
 	//Update the plot 
 	function update() {
-		//Clear uX, uY
-		uX = marginLeftRight;
-		uY = height - 0.6*marginBottom;
+		initialUnused();
 		//Update x axis and its label
 		xScale.domain([0,getMax()]).nice();
 		//Update scale for size
@@ -421,10 +481,11 @@ app.directive('scatterPlot', ['$interval','$compile',function($interval,$compile
 		//Update button location
 		setButton();
 		if (lock) {
-			showInfo(lockDict);
+			showInfo(current);
 		}
 	}
 
+	//Calculate x location for unused hero
 	function calUnusedX(d) {
 		uX = uX + unusedSize*2;
 		if (uX > 0.8 * width) {

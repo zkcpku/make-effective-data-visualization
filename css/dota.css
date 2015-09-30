@@ -22,6 +22,16 @@ p {
 	-o-transition: background .2s ease-in-out, border .2s ease-in-out;
 	transition: background .2s ease-in-out, border .2s ease-in-out;
 }
+
+.btn-around {
+	background: transparent;
+	/* CSS Transition */
+	-webkit-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-moz-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-ms-transition: background .2s ease-in-out, border .2s ease-in-out;
+	-o-transition: background .2s ease-in-out, border .2s ease-in-out;
+	transition: background .2s ease-in-out, border .2s ease-in-out;
+}
 body {
 	background-size:cover;
 	background-size: 100% 100%;
