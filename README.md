@@ -45,6 +45,11 @@ v0.4:
 - Show what heroes were not picked in each TI.
 - Let viewer click a single hero to track over TIs.
 
+v0.5:
+
+- When data clutters, hover on one hero will iterate all cluttering heroes.
+- Improve label location.
+
 ## Feedback:
 
 - From reddit/r/dota2 user Raydano
